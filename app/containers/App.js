@@ -1,0 +1,24 @@
+// @flow
+import * as React from 'react';
+
+type Props = {
+  children: React.Node
+};
+
+export default class App extends React.Component<Props> {
+  props: Props;
+
+  render() {
+    const { children } = this.props;
+    return (
+      <React.Fragment
+        style={{
+          height: '100%',
+          width: '100%'
+        }}
+      >
+        {children}
+      </React.Fragment>
+    );
+  }
+}

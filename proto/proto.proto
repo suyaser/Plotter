@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package proto;
+
+option java_multiple_files = true;
+option java_package = "com.valeo.sdk.castle.testenv.grpc";
+
+service CTE {
+	rpc startStream (stream StreamDataRequest) returns (stream StreamDataResponse);
+}
+
+message SampleData {
+	uint64 timestamp = 2;
+	int32 value = 3;
+}
+
+message SignalData {
+	uint64 id = 1;
+	repeated SampleData data = 2;
+	bool error = 3;
+	string errorMsg = 4;
+}
+
+message StreamDataResponse {
+	repeated SignalData response = 1;
+	bool error = 4;
+	string errorMsg = 5;
+}
+
+message StreamDataRequest {
+	repeated uint64 signalIds = 1;
+}
