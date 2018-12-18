@@ -6,6 +6,7 @@ import type { Store } from '../reducers/types';
 import Routes from '../Routes';
 import { withStyles } from '@material-ui/core/styles';
 import withRoot from '../withRoot';
+import { hot } from 'react-hot-loader';
 
 type Props = {
   store: Store,
@@ -32,4 +33,4 @@ class Root extends Component<Props> {
   }
 }
 
-export default withRoot(withStyles(styles)(Root));
+export default withRoot(withStyles(styles)(hot(module)(Root)));

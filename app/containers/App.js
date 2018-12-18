@@ -10,15 +10,6 @@ export default class App extends React.Component<Props> {
 
   render() {
     const { children } = this.props;
-    return (
-      <React.Fragment
-        style={{
-          height: '100%',
-          width: '100%'
-        }}
-      >
-        {children}
-      </React.Fragment>
-    );
+    return <React.Fragment>{children}</React.Fragment>;
   }
 }

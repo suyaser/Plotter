@@ -6,8 +6,7 @@ import Plot from './Recharts';
 import ColorPicker from './ColorPicker';
 import { withStyles } from '@material-ui/core/styles';
 import withRoot from '../withRoot';
-
-type Props = {};
+import PropTypes from 'prop-types';
 
 const ModeEnum = {
   DEFAULT: 1,
@@ -18,7 +17,7 @@ const ModeEnum = {
 const defaultColor = '#ff0000';
 
 const styles = theme => ({
-  plotContainer: { flex: 1 },
+  plotContainer: { flex: 'auto' },
   moveCursor: {
     cursor: 'move !important'
   },
@@ -27,7 +26,9 @@ const styles = theme => ({
   },
   defaultCursor: {},
   content: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
+    flex: 'auto',
     display: 'flex',
     flexDirection: 'column',
     padding: theme.spacing.unit * 3
@@ -64,7 +65,7 @@ class Home extends Component<Props> {
 
   componentDidMount() {
     setTimeout(() => {
-      this.interval = setInterval(() => this.refresh(), 16);
+      this.interval = setInterval(() => this.refresh(), 1000);
     }, 1000);
   }
 
@@ -267,17 +268,20 @@ class Home extends Component<Props> {
           onMouseMove={this.onMouseMove}
           onMouseDown={this.onMouseDown}
           onMouseUp={this.onMouseUp}
+          ref={el => (this.container = el)}
         >
           <Plot
             data={this.state.displayData}
             domain={this.state.domain}
             cursorType={this.state.cursorType}
             color={this.state.color}
+            width={this.container ? this.container.offsetWidth : 0}
+            height={this.container ? this.container.offsetHeight : 0}
           />
         </div>
         <div>
           <div className={this.props.classes.grabbing}>
-            Data Size : {this.props.data.length}
+            Data Size : {this.props.data ? this.props.data.length : 0}
           </div>
           <div>Display Data Size : {this.state.displayData.length}</div>
           <div>
@@ -296,5 +300,23 @@ class Home extends Component<Props> {
     );
   }
 }
+
+Home.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      data: PropTypes.number,
+      lastData: PropTypes.number
+    })
+  ),
+  lastData: PropTypes.shape({
+    data: PropTypes.number,
+    lastData: PropTypes.number
+  })
+};
+
+Home.defaultProps = {
+  data: [],
+  lastData: { timestamp: 0, data: 0 }
+};
 
 export default withRoot(withStyles(styles)(Home));
