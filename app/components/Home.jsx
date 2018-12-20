@@ -183,6 +183,7 @@ class Home extends Component<Props> {
   };
 
   render() {
+    console.log(this.props.data);
     return (
       <div className={this.props.classes.content}>
         <div>
@@ -319,4 +320,4 @@ Home.defaultProps = {
   lastData: { timestamp: 0, data: 0 }
 };
 
-export default withRoot(withStyles(styles)(Home));
+export default withStyles(styles)(Home);

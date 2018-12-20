@@ -10,7 +10,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import GoldenLayout from 'golden-layout';
 import PropTypes from 'prop-types';
-import TestItem from './TestItem';
 
 import Select from 'react-select';
 
@@ -77,7 +76,7 @@ class HomePage extends Component<Props> {
     }, 0);
     this.startStream();
     setTimeout(() => {
-      this.interval = setInterval(() => this.pollStream(), 16);
+      this.interval = setInterval(() => this.pollStream(), 1000);
     }, 1000);
   }
 
@@ -196,7 +195,6 @@ class HomePage extends Component<Props> {
   };
 
   render() {
-    console.log(this.state.data);
     return (
       <div className={this.props.classes.root}>
         <div className={this.props.classes.drawer}>
@@ -217,4 +215,4 @@ class HomePage extends Component<Props> {
   }
 }
 
-export default withRoot(withStyles(styles)(HomePage));
+export default withStyles(styles)(HomePage);
