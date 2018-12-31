@@ -31,6 +31,7 @@ module.exports = api => {
       [require('@babel/preset-react'), { development }]
     ],
     plugins: [
+      'emotion',
       // Stage 0
       require('@babel/plugin-proposal-function-bind'),
 

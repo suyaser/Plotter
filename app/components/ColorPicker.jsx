@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
 import { SketchPicker } from 'react-color';
 import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import ColorLens from '@material-ui/icons/ColorLens';
 import withRoot from '../withRoot';
 
 const styles = theme => ({
-  color: {
-    width: '36px',
-    height: '14px',
-    borderRadius: '2px'
-  },
-  swatch: {
-    padding: '5px',
-    background: '#fff',
-    borderRadius: '1px',
-    boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-    display: 'inline-block',
-    cursor: 'pointer'
+  button: {
+    margin: theme.spacing.unit
   },
   popover: {
     position: 'absolute',
@@ -56,14 +48,14 @@ class ColorPicker extends Component<Props> {
   render() {
     return (
       <div style={{ display: 'inline-block' }}>
-        <div className={this.props.classes.swatch} onClick={this.handleClick}>
-          <div
-            className={this.props.classes.color}
-            style={{
-              backgroundColor: `${this.props.color}`
-            }}
-          />
-        </div>
+        <IconButton
+          className={this.props.classes.button}
+          aria-label="Color Picker"
+          size="small"
+          onClick={this.handleClick}
+        >
+          <ColorLens />
+        </IconButton>
         {this.state.displayColorPicker ? (
           <div className={this.props.classes.popover}>
             <div

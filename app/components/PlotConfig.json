@@ -1,0 +1,7 @@
+{
+  "ModeEnum": {
+    "DEFAULT": 1,
+    "MOVE": 2,
+    "SELECT": 3
+  }
+}

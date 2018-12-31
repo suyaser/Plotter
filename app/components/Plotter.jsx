@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import { withStyles } from '@material-ui/core/styles';
 import withRoot from '../withRoot';
+import * as config from './PlotConfig.json';
 
 type Props = {};
 
@@ -21,7 +22,7 @@ const styles = theme => ({
   }
 });
 
-class Plot extends Component<Props> {
+class Plotter extends Component<Props> {
   props: Props;
 
   render() {
@@ -31,7 +32,7 @@ class Plot extends Component<Props> {
           this.props.classes.unselectable
         }`}
         data={this.props.data}
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        margin={{ top: 30, right: 50, left: 30, bottom: 30 }}
         width={this.props.width}
         height={this.props.height}
       >
@@ -74,4 +75,4 @@ class Plot extends Component<Props> {
   }
 }
 
-export default withRoot(withStyles(styles)(Plot));
+export default withRoot(withStyles(styles)(Plotter));
