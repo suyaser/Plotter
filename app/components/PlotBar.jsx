@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ColorPicker from './ColorPicker';
 import PropTypes from 'prop-types';
-import withRoot from '../withRoot';
 import IconButton from '@material-ui/core/IconButton';
 import ColorLens from '@material-ui/icons/ColorLens';
 import Pause from '@material-ui/icons/Pause';
@@ -102,4 +101,4 @@ class PlotBar extends Component {
   }
 }
 
-export default withRoot(withStyles(styles)(PlotBar));
+export default withStyles(styles)(PlotBar);

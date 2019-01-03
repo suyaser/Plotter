@@ -7,12 +7,21 @@ option java_package = "com.valeo.sdk.castle.testenv.grpc";
 
 service CTE {
 	rpc startStream (stream StreamDataRequest) returns (stream StreamDataResponse);
+	rpc getSignals (Empty) returns (SignalsResponse);
+}
+
+message SignalsResponse {
+	repeated string data = 1;
 }
 
 message SampleData {
 	uint64 timestamp = 2;
 	int32 value = 3;
 }
+
+message Empty {
+}
+
 
 message SignalData {
 	uint64 id = 1;

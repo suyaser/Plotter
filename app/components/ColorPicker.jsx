@@ -3,7 +3,6 @@ import { SketchPicker } from 'react-color';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import ColorLens from '@material-ui/icons/ColorLens';
-import withRoot from '../withRoot';
 
 const styles = theme => ({
   button: {
@@ -73,4 +72,4 @@ class ColorPicker extends Component<Props> {
   }
 }
 
-export default withRoot(withStyles(styles)(ColorPicker));
+export default withStyles(styles)(ColorPicker);

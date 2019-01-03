@@ -5,6 +5,7 @@ import { routerMiddleware, routerActions } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import createRootReducer from '../reducers';
 import rootSaga from '../sagas/streamSaga';
+import firmwareSaga from '../sagas/firmwareSaga';
 
 const history = createHashHistory();
 
@@ -56,6 +57,7 @@ const configureStore = initialState => {
   const store = createStore(rootReducer, initialState, enhancer);
 
   sagaMiddleware.run(rootSaga);
+  sagaMiddleware.run(firmwareSaga);
   if (module.hot) {
     module.hot.accept(
       '../reducers',

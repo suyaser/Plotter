@@ -11,7 +11,6 @@ import {
   ReferenceLine
 } from 'recharts';
 import { withStyles } from '@material-ui/core/styles';
-import withRoot from '../withRoot';
 import * as config from './PlotConfig.json';
 
 type Props = {};
@@ -75,4 +74,4 @@ class Plotter extends Component<Props> {
   }
 }
 
-export default withRoot(withStyles(styles)(Plotter));
+export default withStyles(styles)(Plotter);

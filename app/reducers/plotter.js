@@ -6,7 +6,9 @@ import {
   ADD_SIGNAL,
   REMOVE_SIGNAL,
   POLL_SUCESSFULL,
-  POLL_FAILED
+  POLL_FAILED,
+  FETCH_SIGNALS_SUCESSFULL,
+  FETCH_SIGNALS_FAILED
 } from '../actions/plotter';
 
 const initState = {
@@ -16,22 +18,25 @@ const initState = {
   data: {},
   connected: false,
   error: { state: false, msg: '' },
+  signals: [],
   maxSize: 20000
 };
 
 const plotter = (state = initState, action) => {
   switch (action.type) {
     case ADD_SIGNAL:
-      return Object.assign({}, state, {
-        streamChannels: [...state.streamChannels, action.id]
-      });
+      return state.streamChannels.includes(action.id)
+        ? state
+        : Object.assign({}, state, {
+            streamChannels: [...state.streamChannels, action.id]
+          });
     case REMOVE_SIGNAL:
       const index = state.streamChannels.indexOf(action.id);
-      return index > -1
-        ? Object.assign({}, state, {
-            streamChannels: state.streamChannels.splice(index, 1)
-          })
-        : state;
+      let channels = state.streamChannels;
+      index > -1 && channels.splice(index, 1);
+      return Object.assign({}, state, {
+        streamChannels: channels
+      });
     case SELECT_SIGNAL:
       return Object.assign({}, state, {
         selectedOption: action.id
@@ -46,16 +51,21 @@ const plotter = (state = initState, action) => {
         error: { state: false, msg: '' },
         connected: false
       });
+    case FETCH_SIGNALS_SUCESSFULL:
+      return Object.assign({}, state, {
+        signals: action.signals
+      });
+    case FETCH_SIGNALS_FAILED:
+      return Object.assign({}, state, {
+        error: { state: true, msg: action.error }
+      });
     case POLL_SUCESSFULL:
       const newData = {};
-      console.log(state.streamChannels);
       for (const signal of state.streamChannels) {
-        console.log(signal);
         newData[signal] = action.data[signal];
         if (state.data[signal])
           newData[signal] = [...state.data[signal], ...action.data[signal]];
-        console.log(newData);
-        while (newData[signal].length > state.maxSize) {
+        while (newData[signal] && newData[signal].length > state.maxSize) {
           newData[signal].shift();
         }
       }

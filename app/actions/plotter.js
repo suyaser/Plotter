@@ -2,6 +2,9 @@ import { Dispatch } from 'redux';
 
 export const SELECT_SIGNAL = 'SELECT_SIGNAL';
 export const CONNECT = 'CONNECT';
+export const FETCH_SIGNALS = 'FETCH_SIGNALS';
+export const FETCH_SIGNALS_SUCESSFULL = 'FETCH_SIGNALS_SUCESSFULL';
+export const FETCH_SIGNALS_FAILED = 'FETCH_SIGNALS_FAILED';
 export const END_CONNECTION = 'END_CONNECTION';
 export const POLL_STREAM = 'POLL_STREAM';
 export const ADD_SIGNAL = 'ADD_SIGNAL';
@@ -12,6 +15,10 @@ export const POLL_FAILED = 'POLL_FAILED';
 export const selectSignal = id => ({
   type: SELECT_SIGNAL,
   id: id
+});
+
+export const fetchSignals = () => ({
+  type: FETCH_SIGNALS
 });
 
 export const startConnection = () => ({

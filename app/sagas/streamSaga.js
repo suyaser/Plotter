@@ -1,22 +1,42 @@
 import { delay } from 'redux-saga';
 import { put, takeLatest } from 'redux-saga/effects';
-import { POLL_STREAM, END_CONNECTION, CONNECT } from '../actions/plotter';
+import {
+  POLL_STREAM,
+  END_CONNECTION,
+  CONNECT,
+  FETCH_SIGNALS,
+  FETCH_SIGNALS_SUCESSFULL,
+  FETCH_SIGNALS_FAILED,
+  fetchSignals
+} from '../actions/plotter';
 import { connect, pollStream, endConnection } from './streamComm';
 
 var messages = require('../../grpc/proto/proto_pb');
 var services = require('../../grpc/proto/proto_grpc_pb');
 var grpc = require('grpc');
 const util = require('util');
+var path = require('path');
+const childProcess = require('child_process');
 
 let client = null;
 let call = null;
+let server = null;
 
 export function* _connect() {
+  console.log(process.resourcesPath);
+  console.log(__dirname);
+  server = yield childProcess.spawn(
+    'javaw',
+    ['-jar', `${path.join(__dirname, '../CRE', 'test.jar')}`],
+    { detached: true }
+  );
   client = yield new services.CTEClient(
     `localhost:50051`,
     grpc.credentials.createInsecure()
   );
   call = yield client.startStream();
+
+  yield put(fetchSignals());
 }
 
 export function* _disconnect() {
@@ -25,6 +45,27 @@ export function* _disconnect() {
 
   if (call) yield call.end();
   call = null;
+
+  console.log(server);
+  yield server.kill('SIGTERM');
+}
+
+export function* _fetchSignals() {
+  const promise = new Promise((resolve, reject) => {
+    client.getSignals(new messages.Empty(), (err, resp) => {
+      if (err) reject(err);
+      resolve(resp);
+    });
+  });
+  try {
+    const response = yield promise;
+    yield put({
+      type: 'FETCH_SIGNALS_SUCESSFULL',
+      signals: response.getDataList().map(x => ({ value: x, label: x }))
+    });
+  } catch (err) {
+    yield put({ type: 'FETCH_SIGNALS_FAILED', error: err });
+  }
 }
 
 export function* _pollStream(action) {
@@ -64,4 +105,5 @@ export default function* rootSaga() {
   yield takeLatest(CONNECT, _connect);
   yield takeLatest(END_CONNECTION, _disconnect);
   yield takeLatest(POLL_STREAM, _pollStream);
+  yield takeLatest(FETCH_SIGNALS, _fetchSignals);
 }

@@ -28,21 +28,22 @@ const styles = theme => ({
   }
 });
 
+const content = {
+  type: 'column',
+  content: []
+};
+
 const config = {
   settings: {
     showPopoutIcon: false,
     showCloseIcon: false
   },
-  content: [
-    {
-      type: 'column',
-      content: []
-    }
-  ]
+  content: [content]
 };
 
 class Home extends React.Component {
   componentDidMount() {
+    this.props.scanFirmwares();
     setTimeout(() => {
       this.instance = new GoldenLayout(config, this.node);
       this.instance.registerComponent('PlotView', PlotView);
@@ -56,7 +57,7 @@ class Home extends React.Component {
   };
 
   componentWillUnmount() {
-    endConnection();
+    this.endConnection();
     window.removeEventListener('resize', this.updateDimensions);
   }
 
@@ -71,6 +72,8 @@ class Home extends React.Component {
         store: this.props.store
       }
     };
+    if (!this.instance.root.contentItems[0])
+      this.instance.root.addChild(content);
     this.instance.root.contentItems[0].addChild(newItemConfig);
 
     this.props.addSignal(this.props.selectedOption.value);
@@ -95,14 +98,17 @@ class Home extends React.Component {
     const {
       classes,
       selectedOption,
-      options,
+      signals,
       addSignal,
       selectSignal,
       startConnection,
       endConnection,
       pollStream,
       removeSignal,
-      connected
+      connected,
+      selectFirmware,
+      selectedFirmware,
+      firmwares
     } = this.props;
     return (
       <div className={classes.root}>
@@ -115,13 +121,24 @@ class Home extends React.Component {
               <Select
                 value={selectedOption}
                 onChange={selectSignal}
-                options={options}
+                options={signals}
               />
               <button onClick={this.createSignalView}>Watch</button>
             </div>
           )}
         </div>
-        <div className={classes.plotContainer} ref={el => (this.node = el)} />
+        <div className={classes.plotContainer} ref={el => (this.node = el)}>
+          {!connected && (
+            <div>
+              <Select
+                value={selectedFirmware}
+                onChange={selectFirmware}
+                options={firmwares}
+              />
+              <button>Choose Firmware</button>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
